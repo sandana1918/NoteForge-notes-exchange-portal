@@ -1,0 +1,16 @@
+{
+  "name": "student-notes-exchange-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Premium student notes exchange portal.",
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix client install",
+    "dev": "concurrently \"npm --prefix backend run dev\" \"npm --prefix client run dev\"",
+    "start": "npm --prefix backend start",
+    "build": "npm --prefix client run build"
+  },
+  "devDependencies": {
+    "concurrently": "latest"
+  }
+}
+
