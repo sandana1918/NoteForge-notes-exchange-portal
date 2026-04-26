@@ -9,10 +9,15 @@
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.6",
+    "@react-three/fiber": "^9.4.0",
     "@vitejs/plugin-react": "latest",
+    "axios": "^1.15.2",
     "react": "latest",
     "react-dom": "latest",
-    "student-notes-exchange-portal": "file:..",
+    "react-router-dom": "^7.9.4",
+    "socket.io-client": "^4.8.1",
+    "three": "^0.180.0",
     "vite": "latest"
   }
 }

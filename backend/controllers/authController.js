@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const Note = require('../models/noteModel');
 const Vote = require('../models/voteModel');
+const LiveNote = require('../models/liveNoteModel');
 
 const generateToken = (userId) => jwt.sign(
   { id: userId },
@@ -109,6 +110,7 @@ const deleteAccount = async (req, res, next) => {
 
     await Vote.deleteMany({ $or: [{ userId }, { noteId: { $in: noteIds } }] });
     await Note.deleteMany({ uploadedBy: userId });
+    await LiveNote.deleteMany({ createdBy: userId });
     await User.findByIdAndDelete(userId);
 
     res.json({ message: 'Account deleted successfully' });

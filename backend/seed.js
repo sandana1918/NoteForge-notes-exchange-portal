@@ -201,18 +201,23 @@ async function seed() {
   fs.mkdirSync(uploadsDir, { recursive: true });
 
   const password = await bcrypt.hash('demo123', 10);
-  const user = await User.findOneAndUpdate(
+  await User.updateOne(
     { email: 'demo@student.local' },
     {
-      name: 'Demo Student',
-      email: 'demo@student.local',
-      password,
-      college: 'OMSAI Institute of Technology',
-      branch: 'Computer Science',
-      semester: '5'
+      $set: {
+        name: 'Demo Student',
+        email: 'demo@student.local',
+        password,
+        college: 'OMSAI Institute of Technology',
+        branch: 'Computer Science',
+        semester: '5'
+      }
     },
-    { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
+    { upsert: true }
   );
+
+  const user = await User.findOne({ email: 'demo@student.local' });
+  if (!user) throw new Error('Demo user missing after seed');
 
   let created = 0;
   for (const sample of samples) {
@@ -224,18 +229,20 @@ async function seed() {
     const exists = await Note.findOne({ title: sample.title, uploadedBy: user._id });
     if (!exists) created += 1;
 
-    await Note.findOneAndUpdate(
+    await Note.updateOne(
       { title: sample.title, uploadedBy: user._id },
       {
-        ...sample,
-        description: sample.content,
-        fileUrl: `/uploads/${sample.fileName}`,
-        originalName: sample.fileName,
-        fileType: 'text/plain',
-        fileSize: fs.statSync(filePath).size,
-        uploadedBy: user._id
+        $set: {
+          ...sample,
+          description: sample.content,
+          fileUrl: `/uploads/${sample.fileName}`,
+          originalName: sample.fileName,
+          fileType: 'text/plain',
+          fileSize: fs.statSync(filePath).size,
+          uploadedBy: user._id
+        }
       },
-      { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
+      { upsert: true }
     );
   }
 
